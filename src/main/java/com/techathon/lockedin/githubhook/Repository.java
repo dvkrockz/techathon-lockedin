@@ -1,5 +1,7 @@
 package com.techathon.lockedin.githubhook;
 
-public class Repository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public class Repository  {
 
 }
