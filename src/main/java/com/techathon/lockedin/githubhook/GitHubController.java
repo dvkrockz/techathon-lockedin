@@ -23,6 +23,7 @@ public class GitHubController {
 	public String gitHubWebHook(@RequestBody String jsonObject) throws ParseException {
 		JSONParser parser = new JSONParser(jsonObject); 
 		String dt= (String) parser.parseObject().get("action");
+		System.out.println(jsonObject);
 		return dt;
 	}
 	

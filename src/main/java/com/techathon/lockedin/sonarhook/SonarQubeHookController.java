@@ -16,6 +16,7 @@ public class SonarQubeHookController {
 	public String sonarQubeWebHookData(@RequestBody String jsonObject) throws ParseException {
 		JSONParser parser = new JSONParser(jsonObject); 
 //		System.out.println(parser.parseObject().get("total"));
+		System.out.println(jsonObject);
 		return jsonObject;
 	}
 }
