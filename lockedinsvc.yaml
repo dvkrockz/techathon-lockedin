@@ -6,6 +6,7 @@ metadata:
     app: lockedin-app
 spec:
   replicas: 1
+  strategy: {}
   selector:
     matchLabels:
       app: lockedin-app
