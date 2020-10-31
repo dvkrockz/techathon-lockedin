@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lockedin
+  name: lockedin-app
   labels:
     app: lockedin-app
 spec:
@@ -16,16 +16,16 @@ spec:
          app: lockedin-app
     spec:
       containers: 
-        - image: {REPOSITORY}/xylem_ui_automation:v{BUILD}
-          name: xylemuiauto-app
+        - image:  {REPOSITORY}/techathon/lockedinsvc:v{BUILD}
+          name: lockedin-app
           imagePullPolicy: Always
           ports:
           - name: lockedin-app
-            containerPort: 8080
+            containerPort: 8086
           resources:
             requests:
-                cpu: "100m"
-                memory: "1500Mi" 
+                cpu: "300m"
+                memory: "1850Mi" 
       restartPolicy: Always
       imagePullSecrets:
         - name: rpaacr-secret4
@@ -35,11 +35,12 @@ apiVersion: v1
 metadata:
   name: lockedin-app-svc
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: lockedin-app
   ports:
     - name: http
       protocol: TCP
-      port: 8080
+      port: 8086
       targetPort: lockedin-app
+
