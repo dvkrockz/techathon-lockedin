@@ -22,8 +22,8 @@ public class GitHubController {
 	@PostMapping(value="postgithubdata")
 	public String gitHubWebHook(@RequestBody String jsonObject) throws ParseException {
 		JSONParser parser = new JSONParser(jsonObject); 
-		System.out.println(parser.parseObject().get("total"));
-		return parser.parseObject().toString();
+		String dt= (String) parser.parseObject().get("action");
+		return dt;
 	}
 	
 }
