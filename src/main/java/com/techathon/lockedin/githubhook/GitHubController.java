@@ -19,10 +19,9 @@ import com.techathon.lockedin.executors.github.GitHubActionType;
 import com.techathon.lockedin.executors.github.GitHubExecutorFactory;
 import com.techathon.lockedin.executors.github.GithubActionExecutors;
 import com.techathon.lockedin.executors.github.NewPRGithubAction;
-import com.techathon.lockedin.executors.github.PRApproveGitHubAction;
 import com.techathon.lockedin.executors.github.PRCommentGitHubAction;
-import com.techathon.lockedin.executors.github.PRDismissedGitHubAction;
 import com.techathon.lockedin.executors.github.PRSubmitGitHubAction;
+import com.techathon.lockedin.executors.github.PrOpenedModel;
 
 @RestController
 @RequestMapping(value = "githubwebhook")
@@ -34,13 +33,10 @@ public class GitHubController {
 	@PostConstruct
 	public void init() {
 		gitHubExecutor = GitHubExecutorFactory.getInstance();
-    
-		gitHubExecutor.addAction(GitHubActionType.NEWPRREQUEST.name(),new NewPRGithubAction<Object>());
-		gitHubExecutor.addAction(GitHubActionType.PRAPPROVEREQUEST.name(),new PRApproveGitHubAction<Object>());
-		gitHubExecutor.addAction(GitHubActionType.PRCOMMENTREQUEST.name(),new PRCommentGitHubAction<Object>());
-		gitHubExecutor.addAction(GitHubActionType.PRDISMISSEDREQUEST.name(),new PRDismissedGitHubAction<Object>());
-		gitHubExecutor.addAction(GitHubActionType.PRSUBMITREQUEST.name(),new PRSubmitGitHubAction<Object>());
-	}
+		gitHubExecutor.addAction(GitHubActionType.NEWPRREQUEST.name(),new NewPRGithubAction<PrOpenedModel>());
+		gitHubExecutor.addAction(GitHubActionType.EDITPRREQUEST.name(),new PRCommentGitHubAction<Object>());
+		gitHubExecutor.addAction(GitHubActionType.PRMERGEDANDCLOSED.name(),new PRSubmitGitHubAction<Object>());
+		}
 	
 	@GetMapping("getOk")
 	public String getData(){
@@ -52,16 +48,20 @@ public class GitHubController {
 		logger.info("Recived GitHubWeb for , %d", jsonObject);
 		JSONParser parser = new JSONParser(jsonObject); 
 		String dt= (String) parser.parseObject().get("action");
-		
 		GithubActionExecutors<?> githubaction = null;
 		ActionResponse<?> actionResponse  = null;
-		try {
-		githubaction = gitHubExecutor.getExecutor(GitHubActionType.getAction(parser.parseObject().get("action").toString()).toString());
-		actionResponse = githubaction.performAction(user, request);
+		if(null != dt && !dt.isEmpty()) {
+			try {
+			githubaction = gitHubExecutor.getExecutor(GitHubActionType.getAction(parser.parseObject().get("action").toString()).toString());
+			actionResponse = githubaction.performAction(null, request);
+			}
+			catch (Exception e) {
+				logger.error("Error in Performing Github Action");
+			}
+		}else {
+			
 		}
-		catch (Exception e) {
-			logger.error("Error in Performing Github Action");
-		}
+		
 		
 		
 		return dt;
