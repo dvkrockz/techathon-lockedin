@@ -16,7 +16,7 @@ spec:
          app: lockedin-app
     spec:
       containers: 
-        - image:  {REPOSITORY}/techathon/lockedinsvc:v{BUILD}
+        - image:  {REPOSITORY}/lockedinsvc:v{BUILD}
           name: lockedin-app
           imagePullPolicy: Always
           ports:
