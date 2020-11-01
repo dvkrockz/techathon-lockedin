@@ -38,7 +38,7 @@ public class LockedinApplication {
 		
 		// Select Top 50 Reviwers 
 		//Send Email
-		String response = mailService.sendMail(emailRequest, model);
+		String response = mailService.sendMail(null, null);
 		
 		//reset developers and reviwers point
 	}
