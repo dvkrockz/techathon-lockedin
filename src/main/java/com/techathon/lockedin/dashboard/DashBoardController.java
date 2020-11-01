@@ -66,7 +66,6 @@ public class DashBoardController {
 	    public List<UserDetails> getAuthenticateData(@RequestParam(defaultValue = "userName", required = true)String userName){
 		  UserDetails userFromDb  =  userRepo.findByGitHubUserName(userName).get();
 		  List<UserDetails> lis = new ArrayList<UserDetails>();
-		  
 		  if(userFromDb != null && !userFromDb.getIsAdmin()) {
 			  lis.add(userFromDb);
 			  return lis;
