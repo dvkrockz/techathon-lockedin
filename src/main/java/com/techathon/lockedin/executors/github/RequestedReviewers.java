@@ -1,7 +1,11 @@
 package com.techathon.lockedin.executors.github;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,6 +31,21 @@ public class RequestedReviewers {
 	
 	@JsonProperty("avatar_url")
 	private String avatarUrl;
+
+	
+	@JsonProperty("comments")
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<GitHubComments> comments;
+	
+	
+	
+	public List<GitHubComments> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<GitHubComments> comments) {
+		this.comments = comments;
+	}
 
 	public Long getId() {
 		return id;
