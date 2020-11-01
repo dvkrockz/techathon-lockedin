@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -33,8 +35,12 @@ public class User {
 
 @JsonProperty("login")
 private String login;
+
 @Id
-@Column(name = "id")
+@Column(name = "user_id")
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Integer userId;
+
 @JsonProperty("id")
 private Integer id;
 @JsonProperty("node_id")

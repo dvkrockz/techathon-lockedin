@@ -93,6 +93,7 @@ private Boolean locked;
 private String title;
 @JsonProperty("user")
 @OneToOne(cascade=CascadeType.ALL)
+@JoinColumn(name="user_id")
 private User user;
 @JsonProperty("body")
 private String body;
