@@ -1,5 +1,6 @@
 package com.techathon.lockedin.dashboard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.util.json.JSONParser;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -59,9 +61,20 @@ public class DashBoardController {
 	}
 	
 	  @GetMapping("Authenticate")
-	    public List<UserDetails> getAuthenticateData(String userName){
-
-	        return userRepo.findAll();
+	    public List<UserDetails> getAuthenticateData(@RequestParam("userName")String userName){
+		  UserDetails userFromDb  =  userRepo.findByGitHubUserName(userName).get();
+		  List<UserDetails> lis = new ArrayList<UserDetails>();
+		  
+		  if(userFromDb != null && !userFromDb.getIsAdmin()) {
+			  lis.add(userFromDb);
+			  return lis;
+		  }else if(userFromDb != null && userFromDb.getIsAdmin()) {
+			  return userRepo.findAll();
+		  }else  {
+			  return null;
+		  }
+		  
+	       
 	    }
 	    
 	    
