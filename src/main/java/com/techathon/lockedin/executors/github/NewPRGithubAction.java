@@ -64,7 +64,7 @@ private UserRepository userRepo;
 	 	}else if(null != userDetailsFromDb && userDetailsFromDb.getPrOpenModelList().isEmpty()){
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
-	 		user.setPrOpenModelList(prOpenModel);
+	 		userDetailsFromDb.setPrOpenModelList(prOpenModel);
 	 		userDetailsFromDb = fromDBToUser(userDetailsFromDb, user);
 	 		userRepo.save(userDetailsFromDb);
 	 	}else {
@@ -117,11 +117,17 @@ return actionResponse;
         }
         if(fromDb.getTotalDeveloperPoints() == null && fromJson.getTotalDeveloperPoints() != null )
         {
+        	 
             fromDb.setTotalDeveloperPoints(fromJson.getTotalDeveloperPoints());
+        }else {
+        	
+        	fromDb.setTotalDeveloperPoints(1000);
         }
         if(fromDb.getTotalReviewerPoints() == null && fromJson.getTotalReviewerPoints() != null )
         {
             fromDb.setTotalReviewerPoints(fromJson.getTotalReviewerPoints());
+        }else {
+        	fromDb.setTotalReviewerPoints(0);
         }
         if(fromDb.getUserCreatedOn() == null && fromJson.getUserCreatedOn() != null )
         {
@@ -161,6 +167,8 @@ user.setIsAdmin(false);
 		user.setGitHubUserName(openModel.getLogin());
         user.setIsAdmin(false);
         user.setUserCreatedOn(new Date());
+        user.setTotalDeveloperPoints(1000);
+ 		user.setTotalReviewerPoints(0);
 		return user;
 		
 		

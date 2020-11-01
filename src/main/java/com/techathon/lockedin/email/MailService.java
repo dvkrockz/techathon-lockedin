@@ -1,4 +1,4 @@
-package com.techathon.lockedin;
+package com.techathon.lockedin.email;
 
 
 import java.io.IOException;
