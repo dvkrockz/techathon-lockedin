@@ -1,17 +1,16 @@
 package com.techathon.lockedin.executors.github;
 
+import com.techathon.lockedin.users.UserRepository;
+
 public class PRSubmitGitHubAction<T> extends GithubActionExecutors<T> {
 
-	@Override
-	public String checkUserExist() {
-		// TODO Auto-generated method stub
-		return null;
+	 
+
+	public PRSubmitGitHubAction(UserRepository userRepo) {
+		super(userRepo);
+		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public boolean saveNewUser() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	 
 
 }

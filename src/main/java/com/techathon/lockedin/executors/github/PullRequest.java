@@ -322,7 +322,7 @@ public void setAssignee(String assignee) {
 }
 
  
-public List<RequestedReviewers> getRequestedReviewers() {
+public List<RequestedReviewers> RequestedReviewers() {
 	return requestedReviewers;
 }
 
@@ -469,6 +469,11 @@ return changedFiles;
 public void setChangedFiles(Integer changedFiles) {
 this.changedFiles = changedFiles;
 }
+
+public List<RequestedReviewers> getRequestedReviewers() {
+	return requestedReviewers;
+}
+
 
  
 }
