@@ -39,13 +39,17 @@ private UserRepository userRepo;
 	 		 LOGGER.info("User Exist with userName %s " , userDetailsFromDb.getGitHubUserName().toString());
 	 		 // If User Existed Check if the PR Exist
 	 		 PrOpenedModel existingPr =  null;
+	 		 List<PrOpenedModel> newPrs = new ArrayList<PrOpenedModel>();
+	 		 boolean newPrTestAdd = false;
 	 		 for(PrOpenedModel prs : userDetailsFromDb.getPrOpenModelList()) {
 	 			if(!prs.getPullRequest().getUrl().equalsIgnoreCase(classObject.getPullRequest().getUrl())) {
 	 			  // Save that PR	
 	 				//PR DoesNot Exist
 	 		 		 //Save PR in the List
-	 				userDetailsFromDb.getPrOpenModelList().add(prs);
-	 				userRepo.save(userDetailsFromDb);
+//	 				userDetailsFromDb.getPrOpenModelList().add(prs);
+	 				newPrTestAdd= true;
+	 				newPrs.add(prs);
+//	 				userRepo.save(userDetailsFromDb);
 	 			}else {
 	 				 //if PR Exist 
  
@@ -60,7 +64,11 @@ private UserRepository userRepo;
 	 				
 	 			}
 	 		 }
-
+	 		 if(newPrTestAdd) {
+	 			userDetailsFromDb.getPrOpenModelList().addAll(newPrs);
+		 		userRepo.save(userDetailsFromDb);
+	 		 }
+	 		
 	 	}else if(null != userDetailsFromDb && userDetailsFromDb.getPrOpenModelList().isEmpty()){
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
