@@ -54,6 +54,7 @@ public class GitHubController {
 		logger.info("Recived GitHubWeb for , %d", jsonObject);
 		JSONParser parser = new JSONParser(jsonObject); 
 		String dt= (String) parser.parseObject().get("action");
+		logger.info(dt);
 		GithubActionExecutors<?> githubaction = null;
 		ActionResponse<?> actionResponse  = null;
 		if(null != dt && !dt.isEmpty()) {
