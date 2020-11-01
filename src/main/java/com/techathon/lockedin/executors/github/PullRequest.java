@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -110,6 +111,7 @@ private String assignee;
  
 @JsonProperty("requested_reviewers")
 @OneToMany(cascade=CascadeType.ALL)
+@JoinColumn(name="id")
 private List<RequestedReviewers> requestedReviewers = null;
  
 @JsonProperty("author_association")
