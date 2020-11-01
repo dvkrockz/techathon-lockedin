@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techathon.lockedin.MailService;
@@ -13,7 +14,8 @@ import com.techathon.lockedin.users.UserRepository;
 
 import net.minidev.json.JSONObject;
 
-@RestController("dashboard")
+@RestController()
+@RequestMapping("dashboard")
 public class DashBoardController {
 
 	@Autowired
@@ -116,6 +118,11 @@ public class DashBoardController {
 	    @GetMapping("showtop")
 	    public List<UserDetails> getTopFifty(){
 	    	return userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
+	    }
+	    
+	    @GetMapping("getuserdata")
+	    public List<UserDetails> getAllUserData(){
+	    	return userRepo.findAll();
 	    }
 	
 }
