@@ -31,10 +31,87 @@ private UserRepository userRepo;
 	 	Gson gs = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 	 		    .create();
 	 	PrOpenedModel classObject = gs.fromJson(jsonObject, PrOpenedModel.class);
-	 	 
 	 	UserDetails user = fromModeltoUser(classObject);
-	 	
 	 	UserDetails userDetailsFromDb = checkUserExist(user.getGitHubUserName());
+	 	
+	 	
+	 	if(userDetailsFromDb == null) {
+	 		//Condition when Author is totally new
+
+	 		 LOGGER.info("In NewPRGithHub Action  Condition when Author is totally new");
+		 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
+		 		prOpenModel.add(classObject);
+		 		user.setPrOpenModelList(prOpenModel);
+		 		userDetailsFromDb = saveNewUser(user);
+	 		
+	 		//Check if there are Any reviewers
+	 		//If exist Check for there User Details and Save
+	 		if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
+	 		for(RequestedReviewers rev: classObject.getPullRequest().getRequestedReviewers()) {
+	 			UserDetails reviewerFromDb = checkUserExist(rev.getLogin());
+	 			if(null == reviewerFromDb) {
+	 				UserDetails reviewer = fromReviewertoUser(rev);
+	 				saveNewUser(reviewer);
+	 			}
+	 		  }
+	 		} 
+
+	 		
+	 	}else if(userDetailsFromDb != null ) {
+	 		 LOGGER.info("In NewPRGithHub Action Condition When Author was just a Reviewer	");
+	 	// Condition When Author was just a Reviewer	
+	 		if(userDetailsFromDb.getGitHubUrl() == null && userDetailsFromDb.getPrOpenModelList().isEmpty()) {
+	 			List<PrOpenedModel> prOpenModel = new ArrayList<>();
+		 		prOpenModel.add(classObject);
+	 			//Check if PR Exist then ADD
+	 			userDetailsFromDb.setPrOpenModelList(prOpenModel);
+	 			userDetailsFromDb = saveNewUser(userDetailsFromDb);
+	 			//Check if Reviwer Exit and Add
+	 			if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
+	 		 		for(RequestedReviewers rev: classObject.getPullRequest().getRequestedReviewers()) {
+	 		 			UserDetails reviewerFromDb = checkUserExist(rev.getLogin());
+	 		 			if(null == reviewerFromDb) {
+	 		 				UserDetails reviewer = fromReviewertoUser(rev);
+	 		 				saveNewUser(reviewer);
+	 		 			}
+	 		 		  }
+	 		 		} 
+	 			
+	 		}else {
+//	 			Condition when Author has already raise a PR Earlier
+	 			 LOGGER.info("In NewPRGithHub Action Condition when Author has already raise a PR Earlier");
+	 			userDetailsFromDb.getPrOpenModelList().add(classObject);
+	 			userDetailsFromDb = saveNewUser(userDetailsFromDb);
+	 			if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
+	 		 		for(RequestedReviewers rev: classObject.getPullRequest().getRequestedReviewers()) {
+	 		 			UserDetails reviewerFromDb = checkUserExist(rev.getLogin());
+	 		 			if(null == reviewerFromDb) {
+	 		 				UserDetails reviewer = fromReviewertoUser(rev);
+	 		 				saveNewUser(reviewer);
+	 		 			}
+	 		 		  }
+	 		 		} 
+	 			
+	 		}
+	 		
+	 	
+	 		
+	 	} 
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
 	 	
 	 	
 	 	if(null != userDetailsFromDb && !userDetailsFromDb.getPrOpenModelList().isEmpty()) {
@@ -89,26 +166,7 @@ private UserRepository userRepo;
 		 			}
 		 		  }
 		 		} 
-	 	}else if (userDetailsFromDb == null){
-	 		 LOGGER.info("In NewPRGithHub Action ELSE if 2");
-	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
-	 		prOpenModel.add(classObject);
-	 		user.setPrOpenModelList(prOpenModel);
-	 		user.setTotalDeveloperPoints(1000);
-	 		user.setTotalReviewerPoints(0);
-	 		userDetailsFromDb = saveNewUser(user);
-	 		//Check if there are Any reviewers
-	 		//If exist Check for there User Details and Save
-	 		if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
-	 		for(RequestedReviewers rev: classObject.getPullRequest().getRequestedReviewers()) {
-	 			UserDetails reviewerFromDb = checkUserExist(rev.getLogin());
-	 			if(null == reviewerFromDb) {
-	 				UserDetails reviewer = fromReviewertoUser(rev);
-	 				saveNewUser(reviewer);
-	 			}
-	 		  }
-	 		} 
-	 	}
+	 	}else if (userDetailsFromDb == null){}
 	    LOGGER.debug(actionResponse.toString());
 	    actionResponse.setPrPullNumber(classObject.getPullRequest().getHtmlUrl());
 return actionResponse;

@@ -3,6 +3,7 @@ package com.techathon.lockedin.executors.github;
 public enum GitHubActionType {
 
 	NEWPRREQUEST("opened"),
+	REVIEWREQUESTED("review_requested"),
 	EDITPRREQUEST("edited"),
 	PRMERGEDANDCLOSED("closed");
 
@@ -29,7 +30,7 @@ public enum GitHubActionType {
 			return GitHubActionType.NEWPRREQUEST;
 			
 		}else if ("review_requested".equalsIgnoreCase(action)) {
-			return GitHubActionType.NEWPRREQUEST;
+			return GitHubActionType.REVIEWREQUESTED;
 		} else if ("submitted".equalsIgnoreCase(action)) {
 			return GitHubActionType.EDITPRREQUEST;
 		}else if ("created".equalsIgnoreCase(action)) {

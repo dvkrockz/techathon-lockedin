@@ -26,9 +26,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Entity
 public class RequestedReviewers {
 
-	
-
-
 @GeneratedValue(strategy = GenerationType.AUTO)
 @Column(name="review_id")
 private Integer reviewRequestorId;

@@ -22,6 +22,7 @@ import com.techathon.lockedin.executors.github.GitHubExecutorFactory;
 import com.techathon.lockedin.executors.github.GithubActionExecutors;
 import com.techathon.lockedin.executors.github.NewPRGithubAction;
 import com.techathon.lockedin.executors.github.PRCommentGitHubAction;
+import com.techathon.lockedin.executors.github.PRReviewRequestedAction;
 import com.techathon.lockedin.executors.github.PRSubmitGitHubAction;
 import com.techathon.lockedin.executors.github.PrOpenedModel;
 import com.techathon.lockedin.users.UserRepository;
@@ -40,6 +41,7 @@ public class GitHubController {
 	public void init() {
 		gitHubExecutor = GitHubExecutorFactory.getInstance();
 		gitHubExecutor.addAction(GitHubActionType.NEWPRREQUEST.name(),new NewPRGithubAction<PrOpenedModel>(userRepo));
+		gitHubExecutor.addAction(GitHubActionType.REVIEWREQUESTED.name(),new PRReviewRequestedAction<PrOpenedModel>(userRepo));
 		gitHubExecutor.addAction(GitHubActionType.EDITPRREQUEST.name(),new PRCommentGitHubAction<Object>(userRepo));
 		gitHubExecutor.addAction(GitHubActionType.PRMERGEDANDCLOSED.name(),new PRSubmitGitHubAction<Object>(userRepo));
 		}
