@@ -22,26 +22,7 @@ public class LockedinApplication {
 		SpringApplication.run(LockedinApplication.class, args);
 	}
 
-	@Autowired
-	private UserRepository userRepo;
-
-
-	@Autowired
-	private MailService mailService;
 	
-	@Scheduled(cron="0 0 0 1 */3 *")
-	public void schedularJob() {
-	    // Something
-		
-		// Get All users
-		List<UserDetails> userList = userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
-		
-		// Select Top 50 Reviwers 
-		//Send Email
-		String response = mailService.sendMail(null, null);
-		
-		//reset developers and reviwers point
-	}
 	
 	
 }
