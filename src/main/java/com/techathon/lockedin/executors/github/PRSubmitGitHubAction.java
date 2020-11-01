@@ -84,12 +84,7 @@ this.userRep = userRepo;
 	 		 	saveNewUser(authorFromDb);
 	//update userTable
 	 		 	}
-	 					
-	 	
-	 	
-	 	
-	 	
-	 	
+
 	 	
 	}
 	
@@ -106,6 +101,8 @@ this.userRep = userRepo;
 		Matcher countOverlappingEmailsMatcher = pattern.matcher(comment.getBody());
 			int count = 0;
 			while (countOverlappingEmailsMatcher.find()) {
+				//NLP Service   //Return which category does the comment fall into weigth // Accuracy thresold 80< 
+				
 			    count++;
 			}
 		return count;

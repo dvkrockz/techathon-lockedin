@@ -1,4 +1,4 @@
-package com.techathon.lockedin;
+package com.techathon.lockedin.email;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
