@@ -33,7 +33,7 @@ public class DashBoardController {
 	private RestTemplate restTemp;
 //	
 //	@Scheduled(cron="0 0 0 1 */3 *")
-	@Scheduled(cron="0 0/1 * * * ?")
+	@Scheduled(cron="0 0/30 * * * ?")
 	public void schedularJob() throws ParseException {
 	    // Something
 
@@ -42,26 +42,28 @@ public class DashBoardController {
 		
 		// Select Top 50 Reviwers 
 		//Send Email
-		for(UserDetails user:userList) {
-			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
-			JSONParser parser = new JSONParser(jsonResponse); 
-			String name= (String) parser.parseObject().get("name");
-			String emailId= (String) parser.parseObject().get("email");
-			System.out.println(jsonResponse);
+//		for(UserDetails user:userList) {
+//			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
+//			JSONParser parser = new JSONParser(jsonResponse); 
+//			String name= (String) parser.parseObject().get("name");
+//			String emailId= (String) parser.parseObject().get("email");
+//			System.out.println(jsonResponse);
+		    System.out.println("In schedular");
 			EmailRequestDto dto = new EmailRequestDto();
-			dto.setFrom("kudos@gep.com");
-			dto.setTo(emailId != null? emailId:"mohit.bansal@gep.com");
+			dto.setFrom("mohit.bansal@gep.com");
+			dto.setTo( "mohit.bansal@gep.com");
 			dto.setSubject("Kudos For Top Reviewer");
-			dto.setName(name);
+			dto.setName("ok");
 			String response = mailService.sendMail(dto, null);
-		}
+			System.out.println(response);
+//		}
 		
 		
 		//reset developers and reviwers point
 	}
 	
 	  @GetMapping("Authenticate")
-	    public List<UserDetails> getAuthenticateData(@RequestParam("userName")String userName){
+	    public List<UserDetails> getAuthenticateData(@RequestParam(defaultValue = "userName", required = true)String userName){
 		  UserDetails userFromDb  =  userRepo.findByGitHubUserName(userName).get();
 		  List<UserDetails> lis = new ArrayList<UserDetails>();
 		  
