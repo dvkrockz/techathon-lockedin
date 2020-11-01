@@ -2,16 +2,22 @@ package com.techathon.lockedin.dashboard;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techathon.lockedin.models.UserDetails;
+import com.techathon.lockedin.users.UserRepository;
 
 import net.minidev.json.JSONObject;
 
 @RestController("dashboard")
 public class DashBoardController {
 
+	@Autowired
+	private UserRepository userRepo;
+
+	
 	  @GetMapping("Authenticate")
 	    public JSONObject getAuthenticateData(String userName){
 
@@ -87,6 +93,10 @@ public class DashBoardController {
 	        
 	        return true;
 	    }
-	
+	    
+	    @GetMapping("showtop")
+	    public List<UserDetails> getTopFifty(){
+	    	return userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
+	    }
 	
 }
