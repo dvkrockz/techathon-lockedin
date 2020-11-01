@@ -79,7 +79,7 @@ this.userRep = userRepo;
 			//End for each reviewer
 	//get total addaed or deducted author points
 	 		 	Integer totDevpoints = authorFromDb.getTotalDeveloperPoints() != null ?  authorFromDb.getTotalDeveloperPoints() : 0;
-	 		 	Integer totAdded = totDevpoints + pointsToBeDeducted;
+	 		 	Integer totAdded = totDevpoints - pointsToBeDeducted;
 	 		 	authorFromDb.setTotalDeveloperPoints(totAdded);
 	 		 	saveNewUser(authorFromDb);
 	//update userTable
