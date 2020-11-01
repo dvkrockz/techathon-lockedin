@@ -35,7 +35,7 @@ private UserRepository userRepo;
 	 	for(PrOpenedModel prDb: userFromDb.getPrOpenModelList()) {
 	 	if(prDb.getPullRequest().getUrl().equalsIgnoreCase(classObject.getPullRequest().getUrl())) {
 	 	//check if comments of review exist
-	 		if(classObject.getReview() != null) {
+	 		if(classObject.getReview() != null && classObject.getComment() == null) {
 	 			boolean isReviwerMatched = false;
 	 			for(RequestedReviewers rev: prDb.getPullRequest().getRequestedReviewers()) {
 	 				if(rev.getLogin().equalsIgnoreCase(classObject.getReview().getUser().getLogin())) {
@@ -50,7 +50,6 @@ private UserRepository userRepo;
 	 					reviewComments.setCreatedAt(classObject.getReview().getSubmittedAt());
 	 					reviewComments.setId(classObject.getReview().getId());
 	 					rev.getComments().add(reviewComments);
-	 					
 	 				}else {
 	 					//Add New Review and Review Comments
 	 					
@@ -61,7 +60,7 @@ private UserRepository userRepo;
 	 			UserDetails userSaved = 	saveNewUser(userFromDb);
 	 			}
 	 			
-	 		}else if(classObject.getComment() != null) {
+	 		}else if(classObject.getComment() != null && classObject.getReview() == null) {
 	 			boolean isCommentsAdded = false;
 	 			for(RequestedReviewers rev: prDb.getPullRequest().getRequestedReviewers()) {
 	 				if(rev.getLogin().equalsIgnoreCase(classObject.getComment().getUser().getLogin())) {

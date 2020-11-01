@@ -42,10 +42,11 @@ this.userRep = userRepo;
 	 	if(pr.getPullRequest()!= null && classObject.getPullRequest()!= null
 	 			&& pr.getPullRequest().getUrl().equalsIgnoreCase(classObject.getPullRequest().getUrl()))	{
 	 		if(pr.getPullRequest().getRequestedReviewers() == null ) {
-	 			
+	 			LOGGER.info("  No Reviewers Exists");
 	 			pr.getPullRequest().setRequestedReviewers(classObject.getPullRequest().getRequestedReviewers());
 	 			
 	 		}else {
+	 			LOGGER.info("  Reviewers Exists");
 	 			List<RequestedReviewers> newPrList = new ArrayList<>();
 	 			for(RequestedReviewers rev: pr.getPullRequest().getRequestedReviewers()) {
 	 				
@@ -57,6 +58,7 @@ this.userRep = userRepo;
 	 					}
 	 			}
 	 				if(!didMatched) {
+	 					LOGGER.info("  Reviewers Added");
 	 					newPrList.add(rev);
 	 				}
 	 		}

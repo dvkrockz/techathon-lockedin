@@ -50,7 +50,6 @@ this.userRep = userRepo;
 	 		 				}
 	 		 			//Calculate total deduct point from Developer -- save transeintly
 	 		 				pointsToBeDeducted = pointsToBeDeducted+points;
-	 		 				
 	 		 			// get reviewer userObject
 	 		 				UserDetails reviewUser = checkUserExist(rev.getLogin());
 	 		 				Integer totDev = reviewUser.getTotalReviewerPoints() != null ? reviewUser.getTotalReviewerPoints() : 0;
