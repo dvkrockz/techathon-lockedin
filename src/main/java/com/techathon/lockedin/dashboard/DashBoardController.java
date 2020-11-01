@@ -3,9 +3,11 @@ package com.techathon.lockedin.dashboard;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.techathon.lockedin.MailService;
 import com.techathon.lockedin.models.UserDetails;
 import com.techathon.lockedin.users.UserRepository;
 
@@ -17,6 +19,23 @@ public class DashBoardController {
 	@Autowired
 	private UserRepository userRepo;
 
+
+	@Autowired
+	private MailService mailService;
+	
+	@Scheduled(cron="0 0 0 1 */3 *")
+	public void schedularJob() {
+	    // Something
+		
+		// Get All users
+		List<UserDetails> userList = userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
+		
+		// Select Top 50 Reviwers 
+		//Send Email
+		String response = mailService.sendMail(null, null);
+		
+		//reset developers and reviwers point
+	}
 	
 	  @GetMapping("Authenticate")
 	    public JSONObject getAuthenticateData(String userName){
