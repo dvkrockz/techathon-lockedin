@@ -29,7 +29,7 @@ public class LockedinApplication {
 	@Autowired
 	private MailService mailService;
 	
-	@Scheduled(cron=" 0 0 30 6,9 *")
+	@Scheduled(cron="0 0 0 1 */3 *")
 	public void schedularJob() {
 	    // Something
 		
