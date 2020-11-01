@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -89,7 +90,7 @@ private Boolean locked;
 @JsonProperty("title")
 private String title;
 @JsonProperty("user")
-@OneToOne
+@OneToOne(cascade=CascadeType.ALL)
 private User user;
 @JsonProperty("body")
 private String body;
@@ -107,7 +108,7 @@ private String mergeCommitSha;
 private String assignee;
  
 @JsonProperty("requested_reviewers")
-@OneToMany
+@OneToMany(cascade=CascadeType.ALL)
 private List<RequestedReviewers> requestedReviewers = null;
  
 @JsonProperty("author_association")

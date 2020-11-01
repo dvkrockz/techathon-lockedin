@@ -58,11 +58,11 @@ public class GitHubController {
 		ActionResponse<?> actionResponse  = null;
 		if(null != dt && !dt.isEmpty()) {
 			try {
-			githubaction = gitHubExecutor.getExecutor(GitHubActionType.getAction(parser.parseObject().get("action").toString()).toString());
+			githubaction = gitHubExecutor.getExecutor(GitHubActionType.getAction(dt).toString());
 			actionResponse = githubaction.performAction(request ,jsonObject);
 			}
 			catch (Exception e) {
-				logger.error("Error in Performing Github Action");
+				logger.error("Error in Performing Github Action",e);
 			}
 		} 
   

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,7 +50,7 @@ public class UserDetails implements Serializable {
 	
 	private Boolean isAdmin;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<PrOpenedModel> prOpenModelList;
 		
 	@CreatedDate

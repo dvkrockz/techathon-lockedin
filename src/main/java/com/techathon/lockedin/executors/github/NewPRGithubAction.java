@@ -1,6 +1,7 @@
 package com.techathon.lockedin.executors.github;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.techathon.lockedin.executors.ActionResponse;
 import com.techathon.lockedin.models.UserDetails;
 import com.techathon.lockedin.users.UserRepository;
@@ -16,24 +19,50 @@ import com.techathon.lockedin.users.UserRepository;
 public class NewPRGithubAction<T> extends GithubActionExecutors<T> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewPRGithubAction.class);
-	
+private UserRepository userRepo;
+	public NewPRGithubAction(UserRepository userRepo) {
+		super(userRepo);
+		this.userRepo = userRepo;
+		// TODO Auto-generated constructor stub
+	}
 	
 	public ActionResponse<?> performAction(HttpServletRequest object, String jsonObject) {
 	 	ActionResponse<T> actionResponse = getNewActionType();
-	 	Gson gs = new Gson();
+	 	Gson gs = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+	 		    .create();
 	 	PrOpenedModel classObject = gs.fromJson(jsonObject, PrOpenedModel.class);
+	 	 
 	 	UserDetails user = fromModeltoUser(classObject);
 	 	UserDetails userDetailsFromDb = checkUserExist(user.getGitHubUserName());
+	 	 
 	 	if(null != userDetailsFromDb) {
 	 		 LOGGER.info("User Exist with userName %s " , userDetailsFromDb.getGitHubUserName().toString());
 	 		 // If User Existed Check if the PR Exist
+	 		 PrOpenedModel existingPr =  null;
+	 		 for(PrOpenedModel prs : userDetailsFromDb.getPrOpenModelList()) {
+	 			if(!prs.getPullRequest().getUrl().equalsIgnoreCase(classObject.getPullRequest().getUrl())) {
+	 			  // Save that PR	
+	 				//PR DoesNot Exist
+	 		 		 //Save PR in the List
+	 				userDetailsFromDb.getPrOpenModelList().add(prs);
+	 				userRepo.save(userDetailsFromDb);
+	 			}else {
+	 				 //if PR Exist 
+	 		 		 
+		 		 	//Check the comments, title, body , or change in reviewers and save accordingly
+	 				
+	 				//Comparing Body
+	 				if(prs.getPullRequest().getBody().equalsIgnoreCase(classObject.getPullRequest().getBody())) {
+	 					prs.getPullRequest().setBody(classObject.getPullRequest().getBody());
+	 					userRepo.save(userDetailsFromDb);
+	 				}
+	 		
+	 				
+	 			}
+	 		 }
+	 		
 	 		 
-	 		 //if PR Exist 
 	 		 
-	 		 	//Check the comments, title, body , or change in reviewers and save accordingly
-	 		 
-	 		 //PR DoesNot Exist
-	 		 //Save PR in the List
 	 		
 	 	}else {
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
@@ -51,8 +80,6 @@ public class NewPRGithubAction<T> extends GithubActionExecutors<T> {
 	 			}
 	 		  }
 	 		} 
-
-	 		
 	 	}
 	    LOGGER.debug(actionResponse.toString());
 	    actionResponse.setPrPullNumber(classObject.getPullRequest().getHtmlUrl());
@@ -67,14 +94,19 @@ return actionResponse;
 
 
 
-	public NewPRGithubAction(UserRepository userRepo) {
-		super(userRepo);
-		// TODO Auto-generated constructor stub
-	}
  
 	public UserDetails fromModeltoUser(PrOpenedModel openModel) {
 		UserDetails user = new UserDetails();
 		user.setGitHubUrl(openModel.getPullRequest().getUser().getHtmlUrl());
+		user.setGitHubUserName(openModel.getPullRequest().getUser().getLogin());
+user.setIsAdmin(false);
+        
+        // for the first time user
+        user.setTotalDeveloperPoints(1000);
+        user.setUserCreatedOn(new Date());
+        
+        // for the first time user
+        user.setTotalReviewerPoints(0);
 		return user; 	
 	}
 
@@ -82,9 +114,13 @@ return actionResponse;
 	public UserDetails fromReviewertoUser(RequestedReviewers openModel) {
 		UserDetails user = new UserDetails();
 		user.setGitHubUserName(openModel.getLogin());
+        user.setIsAdmin(false);
+        user.setUserCreatedOn(new Date());
 		return user;
 		
 		
 	}
+	
+
 	 
 }
