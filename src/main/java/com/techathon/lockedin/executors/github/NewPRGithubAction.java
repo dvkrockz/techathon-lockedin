@@ -67,6 +67,15 @@ private UserRepository userRepo;
 	 		userDetailsFromDb.setPrOpenModelList(prOpenModel);
 	 		userDetailsFromDb = fromDBToUser(userDetailsFromDb, user);
 	 		userRepo.save(userDetailsFromDb);
+	 		if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
+		 		for(RequestedReviewers rev: classObject.getPullRequest().getRequestedReviewers()) {
+		 			UserDetails reviewerFromDb = checkUserExist(rev.getLogin());
+		 			if(null == reviewerFromDb) {
+		 				UserDetails reviewer = fromReviewertoUser(rev);
+		 				saveNewUser(reviewer);
+		 			}
+		 		  }
+		 		} 
 	 	}else {
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
