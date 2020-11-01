@@ -57,6 +57,7 @@ public class GitHubController {
 		JSONParser parser = new JSONParser(jsonObject); 
 		String dt= (String) parser.parseObject().get("action");
 		logger.info(dt);
+		logger.info(jsonObject);
 		GithubActionExecutors<?> githubaction = null;
 		ActionResponse<?> actionResponse  = null;
 		if(null != dt && !dt.isEmpty()) {
