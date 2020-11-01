@@ -28,7 +28,11 @@ public enum GitHubActionType {
 		if ("opened".equalsIgnoreCase(action)) {
 			return GitHubActionType.NEWPRREQUEST;
 			
-		} else if ("edited".equalsIgnoreCase(action)) {
+		} else if ("submitted".equalsIgnoreCase(action)) {
+			return GitHubActionType.EDITPRREQUEST;
+		}else if ("created".equalsIgnoreCase(action)) {
+			return GitHubActionType.EDITPRREQUEST;
+		}else if ("edited".equalsIgnoreCase(action)) {
 			return GitHubActionType.EDITPRREQUEST;
 		} else if ("closed".equalsIgnoreCase(action)) {
 			return GitHubActionType.PRMERGEDANDCLOSED;

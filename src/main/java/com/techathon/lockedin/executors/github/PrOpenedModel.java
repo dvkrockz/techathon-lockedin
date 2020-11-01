@@ -12,7 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,6 +33,14 @@ public class PrOpenedModel {
 private String action;
 @JsonProperty("number")
 private Integer number;
+
+@JsonProperty("comment")
+@Transient
+private GitHubComments comment;
+
+@JsonProperty("review")
+@Transient
+private GitHubReviewComments review;
 
 @Id
 @Column(name = "id")
@@ -79,6 +89,23 @@ public Integer getId() {
 
 public void setId(Integer id) {
 	this.id = id;
+}
+
+
+public GitHubComments getComment() {
+	return comment;
+}
+
+public void setComment(GitHubComments comment) {
+	this.comment = comment;
+}
+
+public GitHubReviewComments getReview() {
+	return review;
+}
+
+public void setReview(GitHubReviewComments review) {
+	this.review = review;
 }
 
  

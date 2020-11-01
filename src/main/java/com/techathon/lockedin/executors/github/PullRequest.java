@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -124,7 +125,8 @@ private String rebaseable;
 @JsonProperty("mergeable_state")
 private String mergeableState;
 @JsonProperty("merged_by")
-private String mergedBy;
+@Transient
+private User mergedBy;
 @JsonProperty("comments")
 private Integer comments;
 @JsonProperty("review_comments")
@@ -359,7 +361,7 @@ public void setRebaseable(String rebaseable) {
 	this.rebaseable = rebaseable;
 }
 
-public void setMergedBy(String mergedBy) {
+public void setMergedBy(User mergedBy) {
 	this.mergedBy = mergedBy;
 }
 
@@ -396,7 +398,7 @@ this.mergeableState = mergeableState;
 }
 
 @JsonProperty("merged_by")
-public Object getMergedBy() {
+public User getMergedBy() {
 return mergedBy;
 }
 

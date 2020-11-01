@@ -35,7 +35,7 @@ private UserRepository userRepo;
 	 	UserDetails user = fromModeltoUser(classObject);
 	 	UserDetails userDetailsFromDb = checkUserExist(user.getGitHubUserName());
 	 	 
-	 	if(null != userDetailsFromDb) {
+	 	if(null != userDetailsFromDb && !userDetailsFromDb.getPrOpenModelList().isEmpty()) {
 	 		 LOGGER.info("User Exist with userName %s " , userDetailsFromDb.getGitHubUserName().toString());
 	 		 // If User Existed Check if the PR Exist
 	 		 PrOpenedModel existingPr =  null;
@@ -48,7 +48,7 @@ private UserRepository userRepo;
 	 				userRepo.save(userDetailsFromDb);
 	 			}else {
 	 				 //if PR Exist 
-	 		 		 
+ 
 		 		 	//Check the comments, title, body , or change in reviewers and save accordingly
 	 				
 	 				//Comparing Body
@@ -60,14 +60,19 @@ private UserRepository userRepo;
 	 				
 	 			}
 	 		 }
-	 		
-	 		 
-	 		 
-	 		
+
+	 	}else if(null != userDetailsFromDb && userDetailsFromDb.getPrOpenModelList().isEmpty()){
+	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
+	 		prOpenModel.add(classObject);
+	 		user.setPrOpenModelList(prOpenModel);
+	 		userDetailsFromDb = fromDBToUser(userDetailsFromDb, user);
+	 		userRepo.save(userDetailsFromDb);
 	 	}else {
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
 	 		user.setPrOpenModelList(prOpenModel);
+	 		user.setTotalDeveloperPoints(1000);
+	 		user.setTotalReviewerPoints(0);
 	 		userDetailsFromDb = saveNewUser(user);
 	 		//Check if there are Any reviewers
 	 		//If exist Check for there User Details and Save
@@ -88,7 +93,47 @@ return actionResponse;
 	
 	
 	
-	
+	public UserDetails fromDBToUser(UserDetails fromDb, UserDetails fromJson) {
+        
+        if(fromDb.getGitHubUrl() == null && fromJson.getGitHubUrl() != null )
+        {
+            fromDb.setGitHubUrl(fromJson.getGitHubUrl());
+        }
+        if(fromDb.getIsAdmin() == null && fromJson.getIsAdmin() != null )
+        {
+            fromDb.setIsAdmin(fromJson.getIsAdmin());
+        }
+        if(fromDb.getGitHubUserName() == null && fromJson.getGitHubUserName() != null )
+        {
+            fromDb.setGitHubUserName(fromJson.getGitHubUserName());
+        }
+        if(fromDb.getId() == null && fromJson.getId() != null )
+        {
+            fromDb.setId(fromJson.getId());
+        }
+        if(fromDb.getLeaderBoardRank() == null && fromJson.getLeaderBoardRank() != null )
+        {
+            fromDb.setLeaderBoardRank(fromJson.getLeaderBoardRank());
+        }
+        if(fromDb.getTotalDeveloperPoints() == null && fromJson.getTotalDeveloperPoints() != null )
+        {
+            fromDb.setTotalDeveloperPoints(fromJson.getTotalDeveloperPoints());
+        }
+        if(fromDb.getTotalReviewerPoints() == null && fromJson.getTotalReviewerPoints() != null )
+        {
+            fromDb.setTotalReviewerPoints(fromJson.getTotalReviewerPoints());
+        }
+        if(fromDb.getUserCreatedOn() == null && fromJson.getUserCreatedOn() != null )
+        {
+            fromDb.setUserCreatedOn(fromJson.getUserCreatedOn());
+        }
+       if(fromDb.getUserEmailId() == null && fromJson.getUserEmailId() != null )
+        {
+            fromDb.setUserEmailId(fromJson.getUserEmailId());
+        }
+      
+        return fromDb;
+    }
  
 
 

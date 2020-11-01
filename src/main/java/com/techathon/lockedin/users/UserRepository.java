@@ -1,5 +1,6 @@
 package com.techathon.lockedin.users;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,7 @@ public   interface UserRepository extends JpaRepository<UserDetails, Long> {
 	
 	
 	Optional<UserDetails> findByGitHubUserName(String userName);
+	
+ List<UserDetails> findTop50ByOrderByTotalReviewerPointsDesc();
 
 }
