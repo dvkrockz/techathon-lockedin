@@ -28,11 +28,12 @@ public class RequestedReviewers {
 
 	
 
-@Id
+
 @GeneratedValue(strategy = GenerationType.AUTO)
 @Column(name="review_id")
 private Integer reviewRequestorId;
 	
+@Id
 	@JsonProperty("id")
 	private Long id;
 	

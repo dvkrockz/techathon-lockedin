@@ -45,14 +45,15 @@ private GitHubReviewComments review;
 @Id
 @Column(name = "id")
 @GeneratedValue(strategy = GenerationType.AUTO)
-private Integer id;
+private Long id;
 
 @JsonProperty("pull_request")
 @OneToOne(cascade=CascadeType.ALL)
-@JoinColumn(name="pull_request_id")
 private PullRequest pullRequest;
 
+
  
+
 @JsonProperty("action")
 public String getAction() {
 return action;
@@ -83,14 +84,15 @@ public void setPullRequest(PullRequest pullRequest) {
 this.pullRequest = pullRequest;
 }
 
-public Integer getId() {
+ 
+
+public Long getId() {
 	return id;
 }
 
-public void setId(Integer id) {
+public void setId(Long id) {
 	this.id = id;
 }
-
 
 public GitHubComments getComment() {
 	return comment;

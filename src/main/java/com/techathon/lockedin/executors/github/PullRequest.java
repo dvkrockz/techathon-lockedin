@@ -73,9 +73,11 @@ private String url;
 
 
 @Id
-@Column(name="pull_request_id")
+@Column(name="pull_id")
 @GeneratedValue(strategy = GenerationType.AUTO)
-private Integer pullRequestId;
+private Long pullRequestId;
+
+
 @JsonProperty("id")
 @Column(name = "id")
 private Integer id;
@@ -104,11 +106,13 @@ private String title;
 private User user;
 
 
-public Integer getPullRequestId() {
+
+
+public Long getPullRequestId() {
 	return pullRequestId;
 }
 
-public void setPullRequestId(Integer pullRequestId) {
+public void setPullRequestId(Long pullRequestId) {
 	this.pullRequestId = pullRequestId;
 }
 
@@ -129,7 +133,7 @@ private String assignee;
  
 @JsonProperty("requested_reviewers")
 @OneToMany(cascade=CascadeType.ALL)
-@JoinColumn(name="id")
+@JoinColumn(name="review_request_id")
 private List<RequestedReviewers> requestedReviewers = null;
  
 @JsonProperty("author_association")

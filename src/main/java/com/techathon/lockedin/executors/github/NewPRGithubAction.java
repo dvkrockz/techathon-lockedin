@@ -33,6 +33,7 @@ private UserRepository userRepo;
 	 	PrOpenedModel classObject = gs.fromJson(jsonObject, PrOpenedModel.class);
 	 	 
 	 	UserDetails user = fromModeltoUser(classObject);
+	 	
 	 	UserDetails userDetailsFromDb = checkUserExist(user.getGitHubUserName());
 	 	
 	 	
@@ -88,8 +89,8 @@ private UserRepository userRepo;
 		 			}
 		 		  }
 		 		} 
-	 	}else {
-	 		 LOGGER.info("In NewPRGithHub Actio ELSE ");
+	 	}else if (userDetailsFromDb == null){
+	 		 LOGGER.info("In NewPRGithHub Action ELSE if 2");
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
 	 		user.setPrOpenModelList(prOpenModel);
