@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -50,8 +52,22 @@ public class GitHubComments
 private String url;
 @JsonProperty("pull_request_review_id")
 private Integer pullRequestReviewId;
-@JsonProperty("id")
+
 @Id
+@Column(name="github_comment_id")
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Integer gitHibCommentId;
+	
+
+public Integer getGitHibCommentId() {
+	return gitHibCommentId;
+}
+
+public void setGitHibCommentId(Integer gitHibCommentId) {
+	this.gitHibCommentId = gitHibCommentId;
+}
+
+@JsonProperty("id")
 private Integer id;
 @JsonProperty("node_id")
 private String nodeId;

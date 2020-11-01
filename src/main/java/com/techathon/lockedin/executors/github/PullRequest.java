@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -69,8 +71,12 @@ public class PullRequest {
 @JsonProperty("url")
 private String url;
 
-@JsonProperty("id")
+
 @Id
+@Column(name="pull_request_id")
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Integer pullRequestId;
+@JsonProperty("id")
 @Column(name = "id")
 private Integer id;
 @JsonProperty("node_id")
@@ -91,10 +97,21 @@ private String state;
 private Boolean locked;
 @JsonProperty("title")
 private String title;
+
 @JsonProperty("user")
 @OneToOne(cascade=CascadeType.ALL)
 @JoinColumn(name="user_id")
 private User user;
+
+
+public Integer getPullRequestId() {
+	return pullRequestId;
+}
+
+public void setPullRequestId(Integer pullRequestId) {
+	this.pullRequestId = pullRequestId;
+}
+
 @JsonProperty("body")
 private String body;
 @JsonProperty("created_at")
@@ -155,6 +172,7 @@ public void setUrl(String url) {
 this.url = url;
 }
 
+ 
 @JsonProperty("id")
 public Integer getId() {
 return id;

@@ -49,7 +49,7 @@ private Integer id;
 
 @JsonProperty("pull_request")
 @OneToOne(cascade=CascadeType.ALL)
-@MapsId
+@JoinColumn(name="pull_request_id")
 private PullRequest pullRequest;
 
  

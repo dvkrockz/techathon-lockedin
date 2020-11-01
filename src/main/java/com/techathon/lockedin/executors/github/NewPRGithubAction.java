@@ -34,7 +34,8 @@ private UserRepository userRepo;
 	 	 
 	 	UserDetails user = fromModeltoUser(classObject);
 	 	UserDetails userDetailsFromDb = checkUserExist(user.getGitHubUserName());
-	 	 
+	 	
+	 	
 	 	if(null != userDetailsFromDb && !userDetailsFromDb.getPrOpenModelList().isEmpty()) {
 	 		 LOGGER.info("User Exist with userName %s " , userDetailsFromDb.getGitHubUserName().toString());
 	 		 // If User Existed Check if the PR Exist
@@ -70,9 +71,12 @@ private UserRepository userRepo;
 	 		 }
 	 		
 	 	}else if(null != userDetailsFromDb && userDetailsFromDb.getPrOpenModelList().isEmpty()){
-	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
-	 		prOpenModel.add(classObject);
-	 		userDetailsFromDb.setPrOpenModelList(prOpenModel);
+	 		
+	 		 LOGGER.info("In NewPRGithHub Actio ElseIf ");
+//	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
+//	 		prOpenModel.add(classObject);
+//	 		userDetailsFromDb.setPrOpenModelList(prOpenModel);
+	 	 
 	 		userDetailsFromDb = fromDBToUser(userDetailsFromDb, user);
 	 		userRepo.save(userDetailsFromDb);
 	 		if( classObject.getPullRequest().getRequestedReviewers().size() > 0) {
@@ -85,6 +89,7 @@ private UserRepository userRepo;
 		 		  }
 		 		} 
 	 	}else {
+	 		 LOGGER.info("In NewPRGithHub Actio ELSE ");
 	 		List<PrOpenedModel> prOpenModel = new ArrayList<>();
 	 		prOpenModel.add(classObject);
 	 		user.setPrOpenModelList(prOpenModel);

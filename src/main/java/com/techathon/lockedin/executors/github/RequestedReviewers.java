@@ -3,8 +3,12 @@ package com.techathon.lockedin.executors.github;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,8 +26,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Entity
 public class RequestedReviewers {
 
+	
+
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name="review_id")
+private Integer reviewRequestorId;
+	
 	@JsonProperty("id")
-	@Id
 	private Long id;
 	
 	@JsonProperty("login")
@@ -35,10 +45,19 @@ public class RequestedReviewers {
 	
 	@JsonProperty("comments")
 	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="github_comment_id")
 	private List<GitHubComments> comments;
 	
 	
 	
+	public Integer getReviewRequestorId() {
+		return reviewRequestorId;
+	}
+
+	public void setReviewRequestorId(Integer reviewRequestorId) {
+		this.reviewRequestorId = reviewRequestorId;
+	}
+
 	public List<GitHubComments> getComments() {
 		return comments;
 	}
