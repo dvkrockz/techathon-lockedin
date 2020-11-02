@@ -54,7 +54,7 @@ private String url;
 private Integer pullRequestReviewId;
 
 @Id
-@Column(name="github_comment_id")
+@Column(name="github_id")
 @GeneratedValue(strategy = GenerationType.AUTO)
 private Integer gitHibCommentId;
 	
