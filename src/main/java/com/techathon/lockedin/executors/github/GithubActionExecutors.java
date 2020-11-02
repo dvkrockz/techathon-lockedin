@@ -37,7 +37,7 @@ public abstract class GithubActionExecutors<T>  {
 		}
 
 	public   UserDetails checkUserExist(String user) {
-		return userRepo.findByGitHubUserName(user).orElse(null);
+		return userRepo.findBygitHubUserName(user).orElse(null);
 	}
 	
 	public UserDetails saveNewUser(UserDetails user) {

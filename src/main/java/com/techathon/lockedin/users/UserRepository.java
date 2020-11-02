@@ -12,7 +12,7 @@ import com.techathon.lockedin.models.UserDetails;
 public   interface UserRepository extends JpaRepository<UserDetails, Long> {
 	
 	
-	Optional<UserDetails> findByGitHubUserName(String userName);
+	Optional<UserDetails> findBygitHubUserName(String userName);
 	
  List<UserDetails> findTop50ByOrderByTotalReviewerPointsDesc();
 

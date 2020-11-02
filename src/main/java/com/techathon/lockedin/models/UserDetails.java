@@ -52,7 +52,6 @@ public class UserDetails implements Serializable {
 	private Boolean isAdmin;
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "pr_model_id")
 	private List<PrOpenedModel> prOpenModelList;
 		
 	@CreatedDate

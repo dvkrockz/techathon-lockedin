@@ -1,8 +1,12 @@
 package com.techathon.lockedin.email;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -14,6 +18,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+
+import com.itextpdf.io.font.constants.StandardFontFamilies;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -37,8 +51,33 @@ public class MailService {
 			MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
 					StandardCharsets.UTF_8.name());
 
-			ClassPathResource pdf = new ClassPathResource("static/attachment.pdf");
-			ClassPathResource image = new ClassPathResource("static/asbnotebook.png");
+			File newPdf =  new File("output.pdf");
+			ClassPathResource img1 = new ClassPathResource("static/footer.jpg");
+			ClassPathResource img2 = new ClassPathResource("static/kudo.jpg");
+//			ClassPathResource pdf = new ClassPathResource(newPdf.getAbsolutePath());
+			ClassPathResource pdf1 = new ClassPathResource("static/KUDOS Certificate - Spot Recognition.pdf");
+			PdfReader reader = new PdfReader(pdf1.getFile());
+			PdfWriter writer = new PdfWriter(newPdf.getAbsolutePath());
+			PdfDocument pdfDoc = new PdfDocument(reader, writer);
+			
+			Date date = new Date(); // your date
+			// Choose time zone in which you want to interpret your Date
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			 DateFormatSymbols dfs = new DateFormatSymbols();
+		     String[] months = dfs.getMonths();
+			
+		    	Document doc = new Document(pdfDoc);
+			  doc.showTextAligned(new Paragraph(request.getFrom()).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(70),getfloatfrompx(920-250), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph("TOP 50 Reviewers").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(360+100),getfloatfrompx(920-350), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph(months[month] + "--" + year).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(170+100),getfloatfrompx(920-500), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph("Your Manager").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(750),getfloatfrompx(920-750), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.close();
+			
+
+			  System.out.println("OKKKKKKKKKKKKKKKKKKKKKK");
 			Template template = configuration.getTemplate("email.ftl");
 			String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
@@ -46,8 +85,9 @@ public class MailService {
 			helper.setFrom(request.getFrom());
 			helper.setSubject(request.getSubject());
 			helper.setText(html, true);
-			helper.addInline("asbnotebook", image);
-			helper.addAttachment("attachment.pdf", pdf);
+			helper.addInline("footer", img1);
+			helper.addInline("kudo", img2);
+			helper.addAttachment("attachment.pdf",newPdf);
 
 			mailSender.send(message);
 			response = "Email has been sent to :" + request.getTo();
@@ -55,5 +95,9 @@ public class MailService {
 			response = "Email send failure to :" + request.getTo();
 		}
 		return response;
+	}
+
+	private float getfloatfrompx(int a) {
+		return (a*72)/300;
 	}
 }

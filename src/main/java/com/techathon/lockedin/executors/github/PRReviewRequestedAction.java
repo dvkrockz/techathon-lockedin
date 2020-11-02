@@ -1,6 +1,7 @@
 package com.techathon.lockedin.executors.github;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,15 +37,22 @@ this.userRep = userRepo;
 		} catch (InterruptedException e) {
 			LOGGER.error("Thread Interrupted");
 		}
+	 	
+	 	for(RequestedReviewers user:classObject.getPullRequest().getRequestedReviewers() ) {
+			UserDetails reviewerFromDb = checkUserExist(user.getLogin());
+			if (null == reviewerFromDb) {
+				UserDetails reviewer = fromReviewertoUser(user);
+				saveNewUser(reviewer);
+			}
+		}
 	 	UserDetails userFromDb = checkUserExist(classObject.getPullRequest().getUser().getLogin());
 	 	if(userFromDb.getPrOpenModelList() != null && !userFromDb.getPrOpenModelList().isEmpty()) {
 	 	for(PrOpenedModel pr: userFromDb.getPrOpenModelList()) {
 	 	if(pr.getPullRequest()!= null && classObject.getPullRequest()!= null
 	 			&& pr.getPullRequest().getUrl().equalsIgnoreCase(classObject.getPullRequest().getUrl()))	{
-	 		if(pr.getPullRequest().getRequestedReviewers() == null ) {
-	 			LOGGER.info("  No Reviewers Exists");
+	 		if(pr.getPullRequest().getRequestedReviewers().isEmpty()) {
+	 			LOGGER.info(" No Reviewers Exists");
 	 			pr.getPullRequest().setRequestedReviewers(classObject.getPullRequest().getRequestedReviewers());
-	 			
 	 		}else {
 	 			LOGGER.info("  Reviewers Exists");
 	 			List<RequestedReviewers> newPrList = new ArrayList<>();
@@ -77,5 +85,14 @@ this.userRep = userRepo;
 	 	}
 	 	return actionType;
 	}
+	public UserDetails fromReviewertoUser(RequestedReviewers openModel) {
+		UserDetails user = new UserDetails();
+		user.setGitHubUserName(openModel.getLogin());
+		user.setIsAdmin(false);
+		user.setUserCreatedOn(new Date());
+		user.setTotalDeveloperPoints(1000);
+		user.setTotalReviewerPoints(0);
+		return user;
 
+	}
 }

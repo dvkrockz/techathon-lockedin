@@ -53,7 +53,7 @@ this.userRep = userRepo;
 	 		 			// get reviewer userObject
 	 		 				UserDetails reviewUser = checkUserExist(rev.getLogin());
 	 		 				Integer totDev = reviewUser.getTotalReviewerPoints() != null ? reviewUser.getTotalReviewerPoints() : 0;
-	 		 				Integer tot = 	reviewUser.getTotalReviewerPoints() + points;
+	 		 				Integer tot = 	totDev + points;
 	 		 				reviewUser.setTotalReviewerPoints(tot);
 							//update reviewer points
 	 		 				saveNewUser(reviewUser);
@@ -66,8 +66,8 @@ this.userRep = userRepo;
 	 						//Add point to user   -- save transeintly
 	 		 				UserDetails reviewUserNoT = checkUserExist(rev.getLogin());
 	 		 				Integer totDev = reviewUserNoT.getTotalReviewerPoints() != null ? reviewUserNoT.getTotalReviewerPoints() : 0;
-	 		 				Integer tot = 	reviewUserNoT.getTotalReviewerPoints() - 5;
-	 		 				pointsToBeDeducted = pointsToBeDeducted + 5;
+	 		 				Integer tot = 	totDev - 5;
+	 		 				pointsToBeDeducted = pointsToBeDeducted - 5;
 	 		 				reviewUserNoT.setTotalReviewerPoints(tot);
 	 		 				saveNewUser(reviewUserNoT);
 	 		 			}	 		 		
