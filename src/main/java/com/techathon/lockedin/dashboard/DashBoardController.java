@@ -1,17 +1,14 @@
 package com.techathon.lockedin.dashboard;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,32 +16,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.itextpdf.io.font.constants.StandardFontFamilies;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 import com.techathon.lockedin.email.EmailRequestDto;
 import com.techathon.lockedin.email.MailService;
+import com.techathon.lockedin.githubhook.GitHubController;
 import com.techathon.lockedin.models.UserDetails;
 import com.techathon.lockedin.users.UserRepository;
 
 @RestController()
 @RequestMapping("dashboard")
 public class DashBoardController {
+	private final static Logger logger = LoggerFactory.getLogger(DashBoardController.class);
 
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private RestTemplate restTemp;
 
 
 	@Autowired
 	private MailService mailService;
 	
- 
 //	
 	 
 //	@Scheduled(cron="0 0 0 1 */3 *")
@@ -53,30 +45,26 @@ public class DashBoardController {
 	    // Something
  
 		// Get All users
-		List<UserDetails> userList = userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
-		EmailRequestDto dto = new EmailRequestDto();
-		dto.setFrom("mohit.bansal@gep.com");
-		dto.setTo( "soniya.kamble@gep.com");
-		dto.setSubject("Kudos For Top Reviewer");
-		dto.setName("ok");
-		String response = mailService.sendMail(dto, null);
+		List<UserDetails> userList = userRepo.findTop2ByOrderByTotalReviewerPointsDesc();
+		
 		// Select Top 50 Reviwers 
 		//Send Email
-//		for(UserDetails user:userList) {
-//			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
-//			JSONParser parser = new JSONParser(jsonResponse); 
-//			String name= (String) parser.parseObject().get("name");
-//			String emailId= (String) parser.parseObject().get("email");
-//			System.out.println(jsonResponse);
-//		    System.out.println("In schedular");
-////			EmailRequestDto dto = new EmailRequestDto();
-//			dto.setFrom("mohit.bansal@gep.com");
-//			dto.setTo( "mohit.bansal@gep.com");
-//			dto.setSubject("Kudos For Top Reviewer");
-//			dto.setName("ok");
-////			String response = mailService.sendMail(dto, null);
-////			System.out.println(response);
-//		}
+		for(UserDetails user:userList) {
+			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
+			JSONParser parser = new JSONParser(jsonResponse); 
+			EmailRequestDto dto = new EmailRequestDto();
+			String name= (String) parser.parseObject().get("name");
+//			String emailId= (String) parser.parseObject().get("userEmailId");
+//			EmailRequestDto dto = new EmailRequestDto();
+			dto.setFrom("mohit.bansal@gep.com");
+			dto.setTo(user.getUserEmailId());
+			logger.info("EMAIL TO " + user.getUserEmailId());
+			dto.setSubject("Kudos For Top Reviewer");
+			dto.setName(name);
+			logger.info("Name EMAIL TO " + name);
+			String response = mailService.sendMail(dto, null);
+//			System.out.println(response);
+		}
 		
 		
 		//reset developers and reviwers point
@@ -109,7 +97,7 @@ public class DashBoardController {
 	    
 	    @GetMapping("showtop")
 	    public List<UserDetails> getTopFifty(){
-	    	return userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
+	    	return userRepo.findTop2ByOrderByTotalReviewerPointsDesc();
 	    }
 	    
 	    @GetMapping("getuserdata")

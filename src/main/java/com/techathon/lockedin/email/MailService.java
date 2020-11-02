@@ -54,8 +54,7 @@ public class MailService {
 			File newPdf =  new File("output.pdf");
 			ClassPathResource img1 = new ClassPathResource("templates/footer.jpg");
 			ClassPathResource img2 = new ClassPathResource("templates/kudo.jpg");
-//			ClassPathResource pdf = new ClassPathResource(newPdf.getAbsolutePath());
-			ClassPathResource pdf1 = new ClassPathResource("static/KUDOS Certificate - Spot Recognition.pdf");
+ 			ClassPathResource pdf1 = new ClassPathResource("static/KUDOS Certificate - Spot Recognition.pdf");
 			PdfReader reader = new PdfReader(pdf1.getFile());
 			PdfWriter writer = new PdfWriter(newPdf.getAbsolutePath());
 			PdfDocument pdfDoc = new PdfDocument(reader, writer);
@@ -70,7 +69,7 @@ public class MailService {
 		     String[] months = dfs.getMonths();
 			
 		      Document doc = new Document(pdfDoc);
-			  doc.showTextAligned(new Paragraph(request.getFrom()).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(90),getfloatfrompx(920-100), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph(request.getName()).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(90),getfloatfrompx(920-100), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
 			  doc.showTextAligned(new Paragraph("TOP 50 Reviewers").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(600),getfloatfrompx(920-300), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
 			  doc.showTextAligned(new Paragraph(months[month] + " -- " + year).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(250),getfloatfrompx(920-400), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
 			  doc.showTextAligned(new Paragraph("Your Manager").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(1400),getfloatfrompx(920-650), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);

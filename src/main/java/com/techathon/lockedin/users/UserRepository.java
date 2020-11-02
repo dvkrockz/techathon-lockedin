@@ -14,6 +14,6 @@ public   interface UserRepository extends JpaRepository<UserDetails, Long> {
 	
 	Optional<UserDetails> findBygitHubUserName(String userName);
 	
- List<UserDetails> findTop50ByOrderByTotalReviewerPointsDesc();
+ List<UserDetails> findTop2ByOrderByTotalReviewerPointsDesc();
 
 }
