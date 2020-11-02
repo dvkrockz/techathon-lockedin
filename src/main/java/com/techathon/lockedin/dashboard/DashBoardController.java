@@ -42,12 +42,12 @@ public class DashBoardController {
 		
 		// Select Top 50 Reviwers 
 		//Send Email
-//		for(UserDetails user:userList) {
-//			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
-//			JSONParser parser = new JSONParser(jsonResponse); 
-//			String name= (String) parser.parseObject().get("name");
-//			String emailId= (String) parser.parseObject().get("email");
-//			System.out.println(jsonResponse);
+		for(UserDetails user:userList) {
+			String jsonResponse = restTemp.getForObject("https://api.github.com/users/"+user.getGitHubUserName(), String.class);
+			JSONParser parser = new JSONParser(jsonResponse); 
+			String name= (String) parser.parseObject().get("name");
+			String emailId= (String) parser.parseObject().get("email");
+			System.out.println(jsonResponse);
 		    System.out.println("In schedular");
 			EmailRequestDto dto = new EmailRequestDto();
 			dto.setFrom("mohit.bansal@gep.com");
@@ -56,7 +56,7 @@ public class DashBoardController {
 			dto.setName("ok");
 			String response = mailService.sendMail(dto, null);
 			System.out.println(response);
-//		}
+		}
 		
 		
 		//reset developers and reviwers point

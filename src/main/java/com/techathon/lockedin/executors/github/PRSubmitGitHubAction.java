@@ -97,13 +97,18 @@ this.userRep = userRepo;
 
 	private Integer compareComments(GitHubComments comment) {
 		Pattern pattern = Pattern.compile(regex);
+		int count = 0;
+		if(comment.getBody()!= null) {
+			
+		
 		Matcher countOverlappingEmailsMatcher = pattern.matcher(comment.getBody());
-			int count = 0;
+			
 			while (countOverlappingEmailsMatcher.find()) {
 				//NLP Service   //Return which category does the comment fall into weigth // Accuracy thresold 80< 
 				
 			    count++;
 			}
+		}
 		return count;
 	}
 }
