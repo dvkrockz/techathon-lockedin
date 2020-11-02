@@ -52,8 +52,8 @@ public class MailService {
 					StandardCharsets.UTF_8.name());
 
 			File newPdf =  new File("output.pdf");
-			ClassPathResource img1 = new ClassPathResource("static/footer.jpg");
-			ClassPathResource img2 = new ClassPathResource("static/kudo.jpg");
+			ClassPathResource img1 = new ClassPathResource("templates/footer.jpg");
+			ClassPathResource img2 = new ClassPathResource("templates/kudo.jpg");
 //			ClassPathResource pdf = new ClassPathResource(newPdf.getAbsolutePath());
 			ClassPathResource pdf1 = new ClassPathResource("static/KUDOS Certificate - Spot Recognition.pdf");
 			PdfReader reader = new PdfReader(pdf1.getFile());
@@ -69,15 +69,13 @@ public class MailService {
 			 DateFormatSymbols dfs = new DateFormatSymbols();
 		     String[] months = dfs.getMonths();
 			
-		    	Document doc = new Document(pdfDoc);
-			  doc.showTextAligned(new Paragraph(request.getFrom()).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(70),getfloatfrompx(920-250), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
-			  doc.showTextAligned(new Paragraph("TOP 50 Reviewers").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(360+100),getfloatfrompx(920-350), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
-			  doc.showTextAligned(new Paragraph(months[month] + "--" + year).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(170+100),getfloatfrompx(920-500), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
-			  doc.showTextAligned(new Paragraph("Your Manager").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(750),getfloatfrompx(920-750), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+		      Document doc = new Document(pdfDoc);
+			  doc.showTextAligned(new Paragraph(request.getFrom()).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(90),getfloatfrompx(920-100), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph("TOP 50 Reviewers").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(600),getfloatfrompx(920-300), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph(months[month] + " -- " + year).setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(250),getfloatfrompx(920-400), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
+			  doc.showTextAligned(new Paragraph("Your Manager").setFont(PdfFontFactory.createFont(StandardFontFamilies.HELVETICA)).setBold().setFontSize(8f) ,getfloatfrompx(1400),getfloatfrompx(920-650), 1, TextAlignment.LEFT, VerticalAlignment.MIDDLE ,0);
 			  doc.close();
-			
-
-			  System.out.println("OKKKKKKKKKKKKKKKKKKKKKK");
+ 
 			Template template = configuration.getTemplate("email.ftl");
 			String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
@@ -85,8 +83,8 @@ public class MailService {
 			helper.setFrom(request.getFrom());
 			helper.setSubject(request.getSubject());
 			helper.setText(html, true);
-			helper.addInline("footer", img1);
-			helper.addInline("kudo", img2);
+			helper.addInline("footer.jpg", img1.getFile());
+			helper.addInline("kudo.jpg", img2.getFile());
 			helper.addAttachment("attachment.pdf",newPdf);
 
 			mailSender.send(message);

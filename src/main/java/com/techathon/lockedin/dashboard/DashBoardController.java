@@ -51,17 +51,12 @@ public class DashBoardController {
 	@Scheduled(cron="0 0/1 * * * ?")
 	public void schedularJob() throws ParseException, IOException {
 	    // Something
-
-	
-		
-		
-		
-		
+ 
 		// Get All users
 		List<UserDetails> userList = userRepo.findTop50ByOrderByTotalReviewerPointsDesc();
 		EmailRequestDto dto = new EmailRequestDto();
 		dto.setFrom("mohit.bansal@gep.com");
-		dto.setTo( "ashutosh.chahar@gep.com");
+		dto.setTo( "soniya.kamble@gep.com");
 		dto.setSubject("Kudos For Top Reviewer");
 		dto.setName("ok");
 		String response = mailService.sendMail(dto, null);
